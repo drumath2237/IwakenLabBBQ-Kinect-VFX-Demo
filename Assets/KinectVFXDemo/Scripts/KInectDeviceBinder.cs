@@ -10,7 +10,7 @@ namespace KinectVFXDemo
 
     {
         [SerializeField]
-        private DeviceBehaviour device;
+        private KinectDeviceBehaviour device;
 
         [VFXPropertyBinding(nameof(System.Int32))]
         public ExposedProperty widthProperty;

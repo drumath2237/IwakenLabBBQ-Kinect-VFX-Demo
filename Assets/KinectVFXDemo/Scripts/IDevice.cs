@@ -23,23 +23,11 @@ namespace KinectVFXDemo
         /// </summary>
         int Height { get; }
 
-        bool IsReady { get; }
+        bool IsRunning { get; }
 
         void StartCamera();
+        void StopCamera();
 
         bool TryGetLatestSensorFrameData(out SensorFrameData frameData);
-    }
-
-    public abstract class DeviceBehaviour : MonoBehaviour, IDevice
-    {
-        public abstract int Width { get; }
-        public abstract int Height { get; }
-        public abstract bool IsReady { get; }
-
-        public abstract void StartCamera();
-
-        public abstract bool TryGetLatestSensorFrameData(out SensorFrameData frameData);
-
-        public abstract void Dispose();
     }
 }
