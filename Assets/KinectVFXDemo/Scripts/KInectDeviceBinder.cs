@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.VFX;
 using UnityEngine.VFX.Utility;
@@ -24,6 +25,8 @@ namespace KinectVFXDemo
         [VFXPropertyBinding("UnityEngine.GraphicsBuffer")]
         public ExposedProperty colorBufferProperty;
 
+        private GraphicsBuffer _positionsBuffer = null, _colorsBuffer = null;
+
 
         public override bool IsValid(VisualEffect component)
         {
@@ -44,19 +47,34 @@ namespace KinectVFXDemo
             var width = frameData.Width;
             var height = frameData.Height;
 
-            var positionsBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, width * height,
-                Marshal.SizeOf<Vector3>());
-            positionsBuffer.SetData(frameData.Positions);
+            _positionsBuffer ??= new GraphicsBuffer(
+                GraphicsBuffer.Target.Structured,
+                GraphicsBuffer.UsageFlags.None,
+                width * height,
+                Marshal.SizeOf(typeof(Vector3))
+            );
 
-            var colorsBuffer =
-                new GraphicsBuffer(GraphicsBuffer.Target.Structured, width * height, Marshal.SizeOf<Color>());
-            colorsBuffer.SetData(frameData.Colors);
+            _positionsBuffer.SetData(frameData.Positions);
 
+            _colorsBuffer ??= new GraphicsBuffer(
+                GraphicsBuffer.Target.Structured,
+                GraphicsBuffer.UsageFlags.None,
+                width * height,
+                Marshal.SizeOf(typeof(Color))
+            );
+
+            _colorsBuffer.SetData(frameData.Colors);
 
             component.SetInt(widthProperty, width);
             component.SetInt(heightProperty, height);
-            component.SetGraphicsBuffer(positionBufferProperty, positionsBuffer);
-            component.SetGraphicsBuffer(colorBufferProperty, colorsBuffer);
+            component.SetGraphicsBuffer(positionBufferProperty, _positionsBuffer);
+            component.SetGraphicsBuffer(colorBufferProperty, _colorsBuffer);
+        }
+
+        private void OnDestroy()
+        {
+            _positionsBuffer?.Dispose();
+            _colorsBuffer?.Dispose();
         }
     }
 }
