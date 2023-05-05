@@ -57,6 +57,11 @@ namespace KinectVFXDemo
 
             using var capture = _kinect.GetCapture();
 
+            if (capture?.Depth == null || capture.Color == null)
+            {
+                return;
+            }
+
             using var mappedColorImage = kinectTransformation.ColorImageToDepthCamera(capture);
             _colorBuffer = mappedColorImage
                 .GetPixels<BGRA>()
