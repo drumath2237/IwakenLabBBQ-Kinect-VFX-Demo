@@ -12,22 +12,26 @@ namespace KinectVFXDemo
         [SerializeField]
         private KinectDeviceBehaviour device;
 
-        [VFXPropertyBinding(nameof(System.Int32))]
+        [VFXPropertyBinding("System.Int32")]
         public ExposedProperty widthProperty;
 
-        [VFXPropertyBinding(nameof(System.Int32))]
+        [VFXPropertyBinding("System.Int32")]
         public ExposedProperty heightProperty;
 
-        [VFXPropertyBinding(nameof(GraphicsBuffer))]
+        [VFXPropertyBinding("UnityEngine.GraphicsBuffer")]
         public ExposedProperty positionBufferProperty;
 
-        [VFXPropertyBinding(nameof(GraphicsBuffer))]
+        [VFXPropertyBinding("UnityEngine.GraphicsBuffer")]
         public ExposedProperty colorBufferProperty;
 
 
         public override bool IsValid(VisualEffect component)
         {
-            return device;
+            return device &&
+                   widthProperty.ToString() != "" &&
+                   heightProperty.ToString() != "" &&
+                   positionBufferProperty.ToString() != "" &&
+                   colorBufferProperty.ToString() != "";
         }
 
         public override void UpdateBinding(VisualEffect component)

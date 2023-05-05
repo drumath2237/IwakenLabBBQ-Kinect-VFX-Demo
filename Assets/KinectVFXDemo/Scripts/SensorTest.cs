@@ -10,8 +10,7 @@ namespace KinectVFXDemo
 
         private void Update()
         {
-            var success = kinect.TryGetLatestSensorFrameData(out var frameData);
-            Debug.Log(success);
+            Debug.Log(nameof(System.Int32));
         }
     }
 }
